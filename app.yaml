@@ -1,0 +1,156 @@
+application: untertool
+version: master
+runtime: python27
+api_version: 1
+
+default_expiration: "5d 12h"
+
+threadsafe: false
+
+libraries:
+- name: numpy
+  version: latest
+- name: webapp2
+  version: latest
+- name: django
+  version: "1.5"
+- name: PIL
+  version: latest
+- name: matplotlib
+  version: latest
+- name: ssl
+  version: "latest" 
+env_variables:
+  UBERTOOL_BATCH_SERVER: 'http://uberrest-topknotmeadows.rhcloud.com/'
+  UBERTOOL_MONGO_SERVER: 'http://uberrest-topknotmeadows.rhcloud.com'
+  UBERTOOL_SECURE_SERVER: 'http://uberrest-topknotmeadows.rhcloud.com'
+  UBERTOOL_REST_SERVER: 'http://localhost:7777'
+  # UBERTOOL_REST_SERVER: 'http://23.23.190.202:7777'
+
+skip_files:
+- ^(.*/)?app\.yaml
+- ^(.*/)?app\.yml
+- ^(.*/)?index\.yaml
+- ^(.*/)?index\.yml
+- ^(.*/)?#.*#
+- ^(.*/)?.*~
+- ^(.*/)?.*\.py[co]
+- ^(.*/)?.*/RCS/.*
+- ^(.*/)?\..*
+- ^(.*/)?.*\.gz
+- ^(.*/)?.*\.aux
+- ^(.*/)?.*\.xcf
+- ^(.*/)?.*\.php
+- ^(.*/)?.*\.bak
+- ^(.*/)?.*\.inc
+- ^(.*/)?.*\.dark
+- ^(.*/)?.*\.nofill
+- ^(.*/)?.*\.SDR
+- ^(.*/)?.*\MIT-LICENSE
+- ^(.*/)?.*\LGPL-LICENSE
+- ^(data/.*)
+- ^(data/webice/.*)
+- ^(data/webice/images/.*)
+- ^(geneec/geneec_picloud/.*)
+- ^(data/.*)
+- ^(REST/.*)
+- ^(przm/przm_picloud/.*)
+- ^(pfam/pfam_picloud/.*)
+- ^(generatepdf/generatepdf_picloud/.*)$
+
+handlers:
+- url: /
+  script: unter_main.py
+- url: /index.html
+  script: unter_main.py
+# All URLs beginning with /stylesheets are treated as paths to static files in
+# the stylesheets/ directory. Note that static_dir handlers do not use a
+# regular expression for the URL pattern, only a prefix.
+- url: /stylesheets
+  static_dir: stylesheets
+- url: /raphael
+  static_dir: raphael
+- url: /images
+  static_dir: images
+- url: /pdfs
+  static_dir: pdfs
+- url: /csvs
+  static_dir: csvs
+- url: /(.*\.(gif|png|jpg))
+  static_files: static/\1
+  upload: static/(.*\.(gif|png|jpg))
+- url: /templates/popup.html
+  static_files: templates/popup.html
+  upload: templates/popup.html
+- url: /data
+  static_dir: data
+
+
+##UNTESTED models##
+#description
+- url: /(.*?)_description.html
+  script: \1/\1_description.py
+#input
+- url: /(.*?)_input.html
+  script: \1/\1_input.py
+#output
+- url: /(.*?)_output.html
+  script: \1/\1_output.py  
+#algorithms
+- url: /(.*?)_algorithms.html
+  script: \1/\1_algorithm.py    
+#references
+- url: /(.*?)_references.html
+  script: \1/\1_references.py 
+#qaqc
+- url: /(.*?)_qaqc.html
+  script: \1/\1_qaqc.py 
+#batch
+- url: /(.*?)_batchinput.html
+  script: \1/\1_batchinput.py
+#batch_output
+- url: /(.*?)_batchoutput.html
+  script: \1/\1_batchoutput.py
+#hisotry
+- url: /(.*?)_history.html
+  script: \1/\1_history.py
+#uncertainty_input
+- url: /(.*?)_uninput.html
+  script: \1/\1_uninput.py
+#uncertainty_output
+- url: /(.*?)_unoutput.html
+  script: \1/\1_unoutput.py
+#blog
+- url: /blog_(.*?).html
+  script: blog/\1.py
+#historyoutput
+- url: /(.*?)_intermediate.html
+  script: \1/\1_intermediate.py
+
+##TESTED models##
+#description
+- url: /(.*?)/(.*?)_description.html
+  script: \1/\2/\2_description.py
+#input
+- url: /(.*?)/(.*?)_input.html
+  script: \1/\2/\2_input.py
+#output
+- url: /(.*?)/(.*?)_output.html
+  script: \1/\2/\2_output.py  
+#algorithms
+- url: /(.*?)/(.*?)_algorithms.html
+  script: \1/\2/\2_algorithm.py    
+#references
+- url: /(.*?)/(.*?)_references.html
+  script: \1/\2/\2_references.py 
+#qaqc
+- url: /(.*?)/(.*?)_qaqc.html
+  script: \1/\2/\2_qaqc.py 
+#qaqc_output
+- url: /(.*?)/(.*?)_qaqc_output.html
+  script: \1/\2/\2_qaqc_output.py
+
+
+#file not found
+- url: /.*
+  script: file_not_found.py
