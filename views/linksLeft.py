@@ -10,6 +10,7 @@ def linksLeft():
             ])
         ),
         ('Aquatic Models', OrderedDict([
+                ('DDM', 'ddm'),
                 ('PRZM', 'przm'),
                 ('PRZM 5', 'przm5'),
                 ('EXAMS', 'exams'),
