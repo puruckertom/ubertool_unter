@@ -1,36 +1,26 @@
-import os
-os.environ['DJANGO_SETTINGS_MODULE']='settings'
-import cgi
-import cgitb
-cgitb.enable()
-import webapp2 as webapp
-from google.appengine.ext.webapp.util import run_wsgi_app
-from google.appengine.ext.webapp import template
-import django
-from django import forms
-from ddm import DDMdb
+"""
+.. module:: ddm_input
+   :synopsis: A useful module indeed.
+"""
 
-class DDMInputPage(webapp.RequestHandler):
-    def get(self):
-        templatepath = os.path.dirname(__file__) + '/../templates/'
-        html = template.render(templatepath+'01uberheader_main.html', {'title': "DDM Inputs"})
-        html = html + template.render(templatepath + '02uberintroblock_wmodellinks.html', {'model':'ddm','page':'input'})
-        html = html + template.render (templatepath + '03ubertext_links_left.html', {})                
-        html = html + template.render(templatepath + '04uberinput_start.html', {
-                'model':'ddm', 
-                'model_attributes':'DDM Inputs'})
-        html = html + str(DDMdb.DDMInp())
-        html = html + template.render(templatepath + '04uberinput_end.html', {'sub_title': 'Submit'})
-        html = html + template.render(templatepath + '05ubertext_tooltips_right.html', {})
-        html = html + template.render(templatepath + '06uberfooter.html', {'links': ''})
-        self.response.out.write(html)
+from django.template.loader import render_to_string
 
-app = webapp.WSGIApplication([('/.*', DDMInputPage)], debug=True)
+def ddmInputPage(request, model='', header='', formData=None):
+    import ddm_parameters
 
-def main():
-    run_wsgi_app(app)
+    # html = render_to_string('04uberinput_jquery.html', { 'model': model })
+    html = render_to_string('04uberinput_start.html', {
+            'model':model, 
+            'model_attributes': header+' Inputs'})
+    html = html + str(ddm_parameters.DdmInp(formData))
+    html = html + render_to_string('04uberinput_end.html', {'sub_title': 'Submit'})
+    # Check if tooltips dictionary exists
+    try:
+        import ddm_tooltips
+        hasattr(ddm_tooltips, 'tooltips')
+        tooltips = ddm_tooltips.tooltips
+    except:
+        tooltips = {}
+    html = html + render_to_string('05ubertext_tooltips_right.html', {'tooltips':tooltips})    
 
-if __name__ == '__main__':
-    main()
-    
-    
+    return html

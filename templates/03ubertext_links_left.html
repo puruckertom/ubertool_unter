@@ -1,27 +1,15 @@
 <!--start 03ubertext_links_left-->
 <div class="left">
   <div class="urbangreymenu" id="l_menu">
-
-    <h3 class="headerbar">Coming Soon</h3>
+    {% for key, value in link_dict.items %}
+    <h3 class="headerbar">{{ key|safe }}</h3>
         <ul>
-            <li><a href="swc_description.html" id="swc" class="fadeMenu">SWC</a></li>
-            <li><a href="ddm_description.html" id="ddm" class="fadeMenu">Downstream Dilution Model</a></li>
-            <li><a href="superprzm_description.html" id="superprzm" class="fadeMenu submenu_last">SuperPRZM</a></li>
+            {% for valueKey, valueValue in value.items %}{% if forloop.last %}
+            <li><a href="/untertool/{{ valueValue }}" id="{{ valueValue }}" class="fadeMenu submenu_last">{{ valueKey|safe }}</a></li>{% else %}
+            <li><a href="/untertool/{{ valueValue }}" id="{{ valueValue }}" class="fadeMenu">{{ valueKey|safe }}</a></li>{% endif %}
+            {% endfor %}
         </ul>
-
-    <h3 class="headerbar">&uuml;bertool</h3>
-        <ul>
-            <li><a href="select_chemical.html" id="select_chemical" class="fadeMenu">Chemical Selection</a></li>
-            <li><a href="site_data.html" id="use" class="fadeMenu">Use/Label/Site Data</a></li>
-            <li><a href="pesticide_properties.html" id="pesticide_properties" class="fadeMenu">Pesticide Properties</a></li>
-            <li><a href="exposure_concentrations.html" id="exposure_concentrations" class="fadeMenu">Exposure Concentrations</a></li>
-            <li><a href="aquatic_toxicity.html" id="aquatic_toxicity" class="fadeMenu">Aquatic Toxicity</a></li>
-            <li><a href="terrestrial_toxicity.html" id="terrestrial_toxicity" class="fadeMenu">Terrestrial Toxicity</a></li>
-            <li><a href="ecosystem_inputs.html" id="ecosystem_inputs" class="fadeMenu">Ecosystem Inputs</a></li>
-            <li><a href="run_ubertool.html" id="run_ubertool" class="fadeMenu">Run &uuml;bertool</a></li>
-            <li><a href="user.html" id="saved_runs" class="fadeMenu submenu_last">Saved Runs</a></li>
-        </ul>
-
+    {% endfor %}
   </div> <!-- End "Left" -->
 </div> <!-- End "urbangreymenu; l_menu" -->
 <!--end 03ubertext_links_left-->
